@@ -3,15 +3,40 @@
 #include "config.h"
 #include "robot.h"
 #include "maze.h"
+
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct
+{
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+} Pixel;
+
+static Pixel texture[TEXTURE_SIZE][TEXTURE_SIZE];
+static bool textureLoaded = false;
 
 static void drawWalls(Robot* r);
 static void drawSky(void);
 static void drawGround(void);
-static void drawColumn(double distance, int x, bool side);
+static void drawColumn(double distance, int x, bool side, int texX);
+static bool loadTexture(const char* filename);
 
 void draw3DWorld(Robot* r)
 {
+    if(!textureLoaded)
+    {
+        textureLoaded = loadTexture("textures/default/red.ppm");
+
+        if(!textureLoaded)
+        {
+            printf("Failed to load texture. Exiting.\n");
+            exit(1);
+        }
+    }
+
     drawSky();
     drawGround();
     drawWalls(r);
@@ -81,35 +106,65 @@ static void drawWalls(Robot* r)
         else
             distance = sideDistY - deltaDistY;
 
-        //correct the distance for the fish-eye effect
+        double wallX;
+
+        if(side == 0)
+            wallX = robotY + distance * rayDirY;
+        else
+            wallX = robotX + distance * rayDirX;
+
+        wallX -= floor(wallX);
+
+        //convert wall position into a texture coordinate.
+        int texX = (int)(wallX * TEXTURE_SIZE);
+
+        if(side == 0 && rayDirX > 0)
+            texX = TEXTURE_SIZE - texX - 1;
+
+        if(side == 1 && rayDirY < 0)
+            texX = TEXTURE_SIZE - texX - 1;
+
+        //correct distance for the fish-eye effect
         distance *= cos(rayAngle - robotAngle);
 
-        drawColumn(distance, x, side);
+        // Draw the textured column.
+        drawColumn(distance, x, side, texX);
 
         rayAngle += angleIncrement;
     }
 }
 
-static void drawColumn(double distance, int x, bool side)
+static void drawColumn(double distance, int x, bool side, int texX)
 {
     if(distance < 0.01)
         distance = 0.01;
 
-    //calculate brightness based on distance
+    int wallHeight = (int)(WINDOW_HEIGHT / distance) * 0.4;
+
+    int wallTop = (WINDOW_HEIGHT - wallHeight) / 2;
+    int wallBottom = (WINDOW_HEIGHT + wallHeight) / 2;
+
     double brightness = 255.0 / (1.0 + distance * 0.5);
 
+    //darken horizontal wall faces slightly for increased depth perception
     if(side == 1)
         brightness *= 0.7;
 
-    int r = (int)(brightness);
-    int g = (int)(brightness * 0.5);
-    int b = (int)(brightness * 0.5);
-    setRGBColour(r, g, b);
+    for(int y = wallTop; y < wallBottom; y++)
+    {
+        if(y < 0 || y >= WINDOW_HEIGHT)
+            continue;
 
-    int wallHeight = (int)(WINDOW_HEIGHT / distance);
-    int wallTop = (WINDOW_HEIGHT - wallHeight) / 2;
-    int wallBottom = (WINDOW_HEIGHT + wallHeight) / 2;
-    drawLine(x, wallTop, x, wallBottom);
+        int texY = (y - wallTop) * TEXTURE_SIZE / wallHeight;
+        Pixel pixel = texture[texY][texX];
+
+        int r = (int)(pixel.r * brightness / 255.0);
+        int g = (int)(pixel.g * brightness / 255.0);
+        int b = (int)(pixel.b * brightness / 255.0);
+
+        setRGBColour(r, g, b);
+        drawLine(x, y, x, y);
+    }
 }
 
 static void drawSky(void)
@@ -133,4 +188,49 @@ static void drawGround(void)
         setRGBColour(shade, shade, shade);
         drawLine(0, i, WINDOW_WIDTH, i);
     }
+}
+
+static bool loadTexture(const char* filename)
+{
+    FILE* file = fopen(filename, "rb");
+
+    if(file == NULL)
+    {
+        printf("Could not load texture: %s\n", filename);
+        return false;
+    }
+
+    int width, height, maxValue;
+
+    if(fscanf(file, "P6 %d %d %d", &width, &height, &maxValue) != 3)
+    {
+        fclose(file);
+        return false;
+    }
+
+    //consume the whitespace after the PPM header.
+    fgetc(file);
+
+    if(width != TEXTURE_SIZE || height != TEXTURE_SIZE || maxValue != 255)
+    {
+        printf("Texture must be 64x64 with max value 255\n");
+        fclose(file);
+        return false;
+    }
+
+    for(int y = 0; y < TEXTURE_SIZE; y++)
+    {
+        for(int x = 0; x < TEXTURE_SIZE; x++)
+        {
+            if(fread(&texture[y][x], sizeof(Pixel), 1, file) != 1)
+            {
+                fclose(file);
+                return false;
+            }
+        }
+    }
+
+    fclose(file);
+
+    return true;
 }
