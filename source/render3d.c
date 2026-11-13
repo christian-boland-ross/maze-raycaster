@@ -8,25 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct
-{
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-} Pixel;
-
-typedef struct
-{
-    Pixel pixels[TEXTURE_SIZE][TEXTURE_SIZE];
-} Texture;
-
-typedef struct
-{
-    Texture wall;
-    Texture ground;
-    Texture sky;
-} TextureSet;
-
 static TextureSet textures;
 
 static void drawWalls(Robot* r);
