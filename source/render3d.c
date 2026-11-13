@@ -7,6 +7,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct
 {
@@ -23,12 +24,13 @@ static void drawSky(void);
 static void drawGround(void);
 static void drawColumn(double distance, int x, bool side, int texX);
 static bool loadTexture(const char* filename);
+static const char* getTexturePath(void);
 
 void draw3DWorld(Robot* r)
 {
     if(!textureLoaded)
     {
-        textureLoaded = loadTexture("textures/default/red.ppm");
+        textureLoaded = loadTexture(getTexturePath());
 
         if(!textureLoaded)
         {
@@ -126,8 +128,7 @@ static void drawWalls(Robot* r)
 
         //correct distance for the fish-eye effect
         distance *= cos(rayAngle - robotAngle);
-
-        // Draw the textured column.
+        
         drawColumn(distance, x, side, texX);
 
         rayAngle += angleIncrement;
@@ -233,4 +234,23 @@ static bool loadTexture(const char* filename)
     fclose(file);
 
     return true;
+}
+
+static const char* getTexturePath(void)
+{
+    const char* textureSet = getenv("TEXTURE_SET");
+
+    if(textureSet == NULL)
+        textureSet = "default";
+
+    if(strcmp(textureSet, "minecraft") == 0)
+        return "textures/minecraft/oak_planks.ppm";
+
+    if(strcmp(textureSet, "wolfenstein") == 0)
+        return "textures/wolfenstein/mossy.ppm";
+
+    if(strcmp(textureSet, "backrooms") == 0)
+        return "textures/backrooms/wallpaper.ppm";
+
+    return "textures/default/red.ppm";
 }
