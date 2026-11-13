@@ -7,7 +7,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct
 {
@@ -16,28 +15,30 @@ typedef struct
     unsigned char b;
 } Pixel;
 
-static Pixel texture[TEXTURE_SIZE][TEXTURE_SIZE];
-static bool textureLoaded = false;
+typedef struct
+{
+    Pixel pixels[TEXTURE_SIZE][TEXTURE_SIZE];
+} Texture;
+
+typedef struct
+{
+    Texture wall;
+    Texture ground;
+    Texture sky;
+} TextureSet;
+
+static TextureSet textures;
 
 static void drawWalls(Robot* r);
 static void drawSky(void);
 static void drawGround(void);
 static void drawColumn(double distance, int x, bool side, int texX);
-static bool loadTexture(const char* filename);
-static const char* getTexturePath(void);
+static bool loadTexture(Texture* texture, const char* filename);
+static void loadTextureSet(void);
 
 void draw3DWorld(Robot* r)
 {
-    if(!textureLoaded)
-    {
-        textureLoaded = loadTexture(getTexturePath());
-
-        if(!textureLoaded)
-        {
-            printf("Failed to load texture. Exiting.\n");
-            exit(1);
-        }
-    }
+    loadTextureSet();
 
     drawSky();
     drawGround();
@@ -157,8 +158,8 @@ static void drawColumn(double distance, int x, bool side, int texX)
             continue;
 
         int texY = (y - wallTop) * TEXTURE_SIZE / wallHeight;
-        Pixel pixel = texture[texY][texX];
-
+        Pixel pixel = textures.wall.pixels[texY][texX];
+        
         int r = (int)(pixel.r * brightness / 255.0);
         int g = (int)(pixel.g * brightness / 255.0);
         int b = (int)(pixel.b * brightness / 255.0);
@@ -170,28 +171,83 @@ static void drawColumn(double distance, int x, bool side, int texX)
 
 static void drawSky(void)
 {
-    for(int i = 0; i < WINDOW_HEIGHT/2; i++)
+    double horizon = WINDOW_HEIGHT / 2.0;
+    double cameraHeight = WINDOW_HEIGHT / 2.0;
+
+    for (int y = 0; y < (int)horizon; y++)
     {
-        int r = 135 + (120 * i / (WINDOW_HEIGHT/2));
-        int g = 205 + (50 * i / (WINDOW_HEIGHT/2));
-        int b = 235 + (20 * i / (WINDOW_HEIGHT/2));
-        setRGBColour(r, g, b);
-        drawLine(0, i, WINDOW_WIDTH, i);
+        double distance = cameraHeight / (horizon - y);
+
+        double ceilingX = -distance;
+        double ceilingY = -distance;
+
+        double stepX = (distance * 2.0) / WINDOW_WIDTH;
+
+        for (int x = 0; x < WINDOW_WIDTH; x++)
+        {
+            int texX = (int)(ceilingX * TEXTURE_SIZE) % TEXTURE_SIZE;
+            int texY = (int)(ceilingY * TEXTURE_SIZE) % TEXTURE_SIZE;
+
+            if (texX < 0) texX += TEXTURE_SIZE;
+            if (texY < 0) texY += TEXTURE_SIZE;
+
+            Pixel pixel = textures.sky.pixels[texY][texX];
+
+            double brightness = 255.0 / (1.0 + distance * 0.2);
+
+            setRGBColour(
+                pixel.r * brightness / 255.0,
+                pixel.g * brightness / 255.0,
+                pixel.b * brightness / 255.0
+            );
+
+            drawLine(x, y, x, y);
+
+            ceilingX += stepX;
+        }
     }
 }
 
 static void drawGround(void)
 {
-    for(int i = WINDOW_HEIGHT/2; i < WINDOW_HEIGHT; i++)
-    {
-        int shade = 20 + (80 * (i - WINDOW_HEIGHT/2) / (WINDOW_HEIGHT/2));
+    double horizon = WINDOW_HEIGHT / 2.0;
+    double cameraHeight = WINDOW_HEIGHT / 2.0;
 
-        setRGBColour(shade, shade, shade);
-        drawLine(0, i, WINDOW_WIDTH, i);
+    for (int y = (int)horizon + 1; y < WINDOW_HEIGHT; y++)
+    {
+        double distance = cameraHeight / (y - horizon);
+
+        double groundX = -distance;
+        double groundY = distance;
+
+        double stepX = (distance * 2.0) / WINDOW_WIDTH;
+
+        for (int x = 0; x < WINDOW_WIDTH; x++)
+        {
+            int texX = (int)(groundX * TEXTURE_SIZE) % TEXTURE_SIZE;
+            int texY = (int)(groundY * TEXTURE_SIZE) % TEXTURE_SIZE;
+
+            if (texX < 0) texX += TEXTURE_SIZE;
+            if (texY < 0) texY += TEXTURE_SIZE;
+
+            Pixel pixel = textures.ground.pixels[texY][texX];
+
+            double brightness = 255.0 / (1.0 + distance * 0.2);
+
+            setRGBColour(
+                (int)(pixel.r * brightness / 255.0),
+                (int)(pixel.g * brightness / 255.0),
+                (int)(pixel.b * brightness / 255.0)
+            );
+
+            drawLine(x, y, x, y);
+
+            groundX += stepX;
+        }
     }
 }
 
-static bool loadTexture(const char* filename)
+static bool loadTexture(Texture* texture, const char* filename)
 {
     FILE* file = fopen(filename, "rb");
 
@@ -223,11 +279,17 @@ static bool loadTexture(const char* filename)
     {
         for(int x = 0; x < TEXTURE_SIZE; x++)
         {
-            if(fread(&texture[y][x], sizeof(Pixel), 1, file) != 1)
+            unsigned char rgb[3];
+
+            if(fread(rgb, 1, 3, file) != 3)
             {
                 fclose(file);
                 return false;
             }
+
+            texture->pixels[y][x].r = rgb[0];
+            texture->pixels[y][x].g = rgb[1];
+            texture->pixels[y][x].b = rgb[2];
         }
     }
 
@@ -236,21 +298,19 @@ static bool loadTexture(const char* filename)
     return true;
 }
 
-static const char* getTexturePath(void)
+static void loadTextureSet(void)
 {
     const char* textureSet = getenv("TEXTURE_SET");
 
-    if(textureSet == NULL)
-        textureSet = "default";
+    char wallPath[100];
+    char floorPath[100];
+    char skyPath[100];
 
-    if(strcmp(textureSet, "minecraft") == 0)
-        return "textures/minecraft/oak_planks.ppm";
+    sprintf(wallPath, "textures/%s/wall.ppm", textureSet);
+    sprintf(floorPath, "textures/%s/ground.ppm", textureSet);
+    sprintf(skyPath, "textures/%s/sky.ppm", textureSet);
 
-    if(strcmp(textureSet, "wolfenstein") == 0)
-        return "textures/wolfenstein/mossy.ppm";
-
-    if(strcmp(textureSet, "backrooms") == 0)
-        return "textures/backrooms/wallpaper.ppm";
-
-    return "textures/default/red.ppm";
+    loadTexture(&textures.wall, wallPath);
+    loadTexture(&textures.ground, floorPath);
+    loadTexture(&textures.sky, skyPath);
 }
