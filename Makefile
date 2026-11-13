@@ -1,6 +1,7 @@
 CC = gcc
 
 CFLAGS = -Wall -Wextra -g
+LDLIBS = -lm
 
 SRC_DIR = source
 GRAPHICS_DIR = graphics
@@ -15,7 +16,7 @@ TARGET = maze
 all: $(TARGET)
 
 $(TARGET): $(SOURCES)
-	$(CC) $(CFLAGS) -I$(GRAPHICS_DIR) -I$(INCLUDE_DIR) $(SOURCES) -o $(TARGET)
+	$(CC) $(CFLAGS) -I$(GRAPHICS_DIR) -I$(INCLUDE_DIR) $(SOURCES) -o $(TARGET) $(LDLIBS)
 
 run: $(TARGET)
 	./$(TARGET) | java -jar $(GRAPHICS_DIR)/drawapp-5.0.jar

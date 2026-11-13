@@ -3,7 +3,7 @@
 #include "config.h"
 #include "robot.h"
 #include "maze.h"
-#include "math.h"
+#include <math.h>
 
 static void drawWalls(Robot* r);
 static void drawSky(void);
@@ -34,8 +34,8 @@ static void drawWalls(Robot* r)
         double rayDirX = cos(rayAngle);
         double rayDirY = sin(rayAngle);
 
-        double deltaDistX = (rayDirX == 0) ? 1e30 : absolute(1.0 / rayDirX); // avoid division by zero
-        double deltaDistY = (rayDirY == 0) ? 1e30 : absolute(1.0 / rayDirY);
+        double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1.0 / rayDirX); // avoid division by zero
+        double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1.0 / rayDirY);
 
         int stepX = (rayDirX < 0) ? -1 : 1;
         int stepY = (rayDirY < 0) ? -1 : 1;
