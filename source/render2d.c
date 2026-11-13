@@ -46,10 +46,10 @@ static void drawMaze(void)
 }
 
 
-void drawRobot(void)
+void drawRobot(Robot* r)
 {
-    int pixelX = getRobotX() * CELL_SIZE;
-    int pixelY = getRobotY() * CELL_SIZE;
+    int pixelX = r->x * CELL_SIZE;
+    int pixelY = r->y * CELL_SIZE;
 
     int margin = CELL_SIZE / 10;
 
@@ -64,7 +64,7 @@ void drawRobot(void)
     int px[3];
     int py[3];
 
-    switch (getRobotOrientation())
+    switch (r->orientation)
     {
         case 0: // North
             px[0] = centreX;

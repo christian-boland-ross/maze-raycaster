@@ -2,97 +2,83 @@
 #include "config.h"
 #include "maze.h"
 
-static int x = 0;
-static int y = 0;
-
-static int orientation = 1;
-// 0 = north, 1 = east, 2 = south, 3 = west
-
-int getRobotX(void)
+void initialiseRobot(Robot* r, int x, int y, int orientation)
 {
-    return x;
-}
-
-int getRobotY(void)
-{
-    return y;
-}
-
-int getRobotOrientation(void)
-{
-    return orientation;
+    r->x = x;
+    r->y = y;
+    r->orientation = orientation;
 }
 
 //wall following maze solver algorithm
-void updateRobot(void)
+void updateRobot(Robot* r)
 {
-    right();
+    right(r);
 
-    if (canMoveForward())
+    if (canMoveForward(r))
     {
-        forward();
+        forward(r);
     }
     else
     {
-        left();
+        left(r);
 
-        if (canMoveForward())
+        if (canMoveForward(r))
         {
-            forward();
+            forward(r);
         }
         else
         {
             // Try turning left
-            left();
+            left(r);
 
-            if (canMoveForward())
+            if (canMoveForward(r))
             {
-                forward();
+                forward(r);
             }
             else
             {
                 // Dead end: turn around
-                left();
+                left(r);
             }
         }
     }
 }
 
-void forward(void)
+void forward(Robot* r)
 {
-    if(canMoveForward()) 
+    if(canMoveForward(r)) 
     {
-        switch (orientation)
+        switch (r->orientation)
         {
-            case 0: y++; break;
-            case 1: x++; break;
-            case 2: y--; break;
-            case 3: x--; break;
+            case 0: r->y++; break;
+            case 1: r->x++; break;
+            case 2: r->y--; break;
+            case 3: r->x--; break;
         }
     }
 }
 
-void left(void)
+void left(Robot* r)
 {
-    orientation = (orientation + 3) % 4;
+    r->orientation = (r->orientation + 3) % 4;
 }
 
-void right(void)
+void right(Robot* r)
 {
-    orientation = (orientation + 1) % 4;
+    r->orientation = (r->orientation + 1) % 4;
 }
 
-bool atMarker(void)
+bool atMarker(Robot* r)
 {
-    return x == GRID_SIZE - 1 && y == GRID_SIZE - 1;
+    return r->x == GRID_SIZE - 1 && r->y == GRID_SIZE - 1;
 }
 
-bool canMoveForward(void) 
+bool canMoveForward(Robot* r) 
 {
-    int nextX = x;
-    int nextY = y;
+    int nextX = r->x;
+    int nextY = r->y;
 
-    switch (orientation)
+    switch (r->orientation)
     {
         case 0: nextY++; break;
         case 1: nextX++; break;

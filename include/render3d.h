@@ -1,6 +1,8 @@
 #ifndef RENDER3D_H
 #define RENDER3D_H
 
-void draw3DWorld(void);
+#include "robot.h"
+
+void draw3DWorld(Robot* r);
 
 #endif

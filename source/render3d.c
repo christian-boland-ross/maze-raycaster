@@ -5,26 +5,26 @@
 #include "maze.h"
 #include "math.h"
 
-static void drawWalls(void);
+static void drawWalls(Robot* r);
 static void drawSky(void);
 static void drawGround(void);
 static void drawColumn(double distance, int x, bool side);
 
-void draw3DWorld(void)
+void draw3DWorld(Robot* r)
 {
     drawSky();
     drawGround();
-    drawWalls();
+    drawWalls(r);
 }
 
-static void drawWalls(void)
+static void drawWalls(Robot* r)
 {
     double angleIncrement = FOV * PI/180 / WINDOW_WIDTH;
-    double robotAngle = getRobotOrientation() * PI / 2.0 - PI/2.0;
+    double robotAngle = r->orientation * PI / 2.0 - PI/2.0;
     double rayAngle = robotAngle - FOV * PI/180 / 2.0;
 
-    double robotX = getRobotX() + 0.5; // the + 0.5 starts ray at the center of the robot's square
-    double robotY = getRobotY() + 0.5;
+    double robotX = r->x + 0.5; // the + 0.5 starts ray at the center of the robot's square
+    double robotY = r->y + 0.5;
 
     int x = -1;
     while(x < WINDOW_WIDTH)
@@ -40,8 +40,8 @@ static void drawWalls(void)
         int stepX = (rayDirX < 0) ? -1 : 1;
         int stepY = (rayDirY < 0) ? -1 : 1;
 
-        int mapX = getRobotX();
-        int mapY = getRobotY();
+        int mapX = r->x;
+        int mapY = r->y;
 
         double sideDistX;
         double sideDistY;
