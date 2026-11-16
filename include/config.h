@@ -5,11 +5,11 @@
 
 #define FOV 130.0 // Field of view in degrees
 
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH 400
+#define WINDOW_HEIGHT 200
 
 #define GRID_SIZE 10
-#define GRID_PIXELS 200
+#define GRID_PIXELS 100
 #define CELL_SIZE GRID_PIXELS/GRID_SIZE
 
 #define ENTRANCE_MARKER_X 0
