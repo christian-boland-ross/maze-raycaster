@@ -39,10 +39,9 @@ static void drawMaze(void)
         }
     }
 
-    //top left is always start, bottom right is always finish
     setColour(green);
-    fillRect(0, 0, CELL_SIZE, CELL_SIZE);
-    fillRect((GRID_SIZE - 1) * CELL_SIZE, (GRID_SIZE - 1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    fillRect(ENTRANCE_MARKER_X * CELL_SIZE, ENTRANCE_MARKER_Y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    fillRect(EXIT_MARKER_X * CELL_SIZE, EXIT_MARKER_Y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 }
 
 

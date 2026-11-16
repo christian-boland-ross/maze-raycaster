@@ -9,8 +9,11 @@ int main(void)
 {
     setWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     initialiseMaze();
-    Robot robot;
-    initialiseRobot(&robot, 0, 0, 1); // x, y, orientation
+    Robot robot = {
+        ENTRANCE_MARKER_X,
+        ENTRANCE_MARKER_Y,
+        1
+    };
     
     //main game loop
     while(true)
@@ -22,7 +25,7 @@ int main(void)
         draw2DWorld();
         drawRobot(&robot);
 
-        sleep(100);
+        sleep(1000);
 
         if(atMarker(&robot))
         {

@@ -8,9 +8,7 @@ typedef struct robot
     int orientation;
 } Robot;
 
-void initialiseRobot(Robot* r, int x, int y, int orientation);
-
-void updateRobot(Robot* r); // update the robot position and orientation based on the current maze configuration.
+void updateRobot(Robot* r); // find the next step in solving the maze and move the robot.
 
 void forward(Robot* r); // move forward to the next square in the direction the robot is facing. If there is a maze wall in front of the robot it does not move.
 void left(Robot* r); // turn the robot direction left (anti-clockwise) by 90 degrees, while remaining in the same position.

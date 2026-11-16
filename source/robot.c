@@ -2,13 +2,6 @@
 #include "config.h"
 #include "maze.h"
 
-void initialiseRobot(Robot* r, int x, int y, int orientation)
-{
-    r->x = x;
-    r->y = y;
-    r->orientation = orientation;
-}
-
 //wall following maze solver algorithm
 void updateRobot(Robot* r)
 {
@@ -70,7 +63,7 @@ void right(Robot* r)
 
 bool atMarker(Robot* r)
 {
-    return r->x == GRID_SIZE - 1 && r->y == GRID_SIZE - 1;
+    return r->x == EXIT_MARKER_X && r->y == EXIT_MARKER_Y;
 }
 
 bool canMoveForward(Robot* r) 
