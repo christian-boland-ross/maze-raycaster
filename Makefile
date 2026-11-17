@@ -14,6 +14,11 @@ TARGET = maze
 TEXTURE_SET ?= default
 MAZE_SIZE ?= 10
 
+MAZE_SIZE_VALID := $(shell test "$(MAZE_SIZE)" -ge 3 2>/dev/null && test "$(MAZE_SIZE)" -le 100 2>/dev/null && echo yes)
+ifneq ($(MAZE_SIZE_VALID),yes)
+$(error MAZE_SIZE must be an integer between 3 and 100)
+endif
+
 .PHONY: all clean run FORCE
 
 all: $(TARGET)

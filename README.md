@@ -34,7 +34,7 @@ TEXTURE_SET=wolfenstein make run
 TEXTURE_SET=backrooms make run
 ```
 
-You can also set the maze size when building and running (defaults to 10):
+You can also set the maze size when building and running (defaults to 10; valid sizes are 3–100):
 
 ```bash
 MAZE_SIZE=15 make run
