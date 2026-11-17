@@ -91,7 +91,6 @@ static void drawWalls(Robot* r)
             distance = sideDistY - deltaDistY;
 
         double wallX;
-
         if(side == 0)
             wallX = robotY + distance * rayDirY;
         else
@@ -101,11 +100,7 @@ static void drawWalls(Robot* r)
 
         //convert wall position into a texture coordinate.
         int texX = (int)(wallX * TEXTURE_SIZE);
-
-        if(side == 0 && rayDirX > 0)
-            texX = TEXTURE_SIZE - texX - 1;
-
-        if(side == 1 && rayDirY < 0)
+        if ((side == 0 && rayDirX > 0) || (side == 1 && rayDirY < 0))
             texX = TEXTURE_SIZE - texX - 1;
 
         //correct distance for the fish-eye effect

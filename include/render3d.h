@@ -2,6 +2,7 @@
 #define RENDER3D_H
 
 #include "robot.h"
+#include "config.h"
 
 void draw3DWorld(Robot* r);
 
