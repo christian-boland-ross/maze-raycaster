@@ -3,14 +3,14 @@ Course checklist:
 - [x] Display a maze
 - [x] Display a robot
 - [x] Implement a maze search algorithm
-- [ ] Implement a maze generator algorithm
-- [ ] Improve searcher algorithm to work with all possible mazes
+- [x] Implement a maze generator algorithm
+- [x] Improve searcher algorithm to work with all possible mazes
 
 Main parts:
 - [x] [2D maze](#2d-maze)
-- [ ] [3D maze](#3d-maze)
+- [x] [3D maze](#3d-maze)
 - [x] [Maze Searcher](#maze-searcher)
-- [ ] [Maze Generator](#maze-generator)
+- [x] [Maze Generator](#maze-generator)
 
 ## 2D maze
 TO-DO:
@@ -33,7 +33,7 @@ TO-DO:
 - [x] Draw floor and sky
 - [x] Determine visible walls
 - [x] Draw visible walls
-- [ ] Lighting? <!-- Torch and simulate light falloff? or fog? multiple worlds? -->
+- [x] Lighting
 
 ### Column based ray-casting approach
 Cast a ray from the player's position.
@@ -45,11 +45,10 @@ Draw a vertical strip of pixels.
 ## Maze Searcher
 TO_DO:
 - [x] Implement simple placeholder algorithm
-- [ ] Choose Algorithm
-- [ ] Implement connectivity using [Robot Interface](#robot-interface)
+- [x] Choose Algorithm
+- [x] Implement connectivity using [Robot Interface](#robot-interface)
 
 
 ## Maze Generator
 TO-DO:
-- [ ] Choose algorithm
-- [ ] Decide connectivity <!-- File? Array by argument? Other method? -->
+- [x] Choose algorithm
