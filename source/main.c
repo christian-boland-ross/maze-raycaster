@@ -5,8 +5,13 @@
 #include "maze.h"
 #include "robot.h"
 
+#include <time.h>
+#include <stdlib.h>
+
 int main(void)
 {
+    srand((unsigned int)time(NULL));
+
     setWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     initialiseMaze();
     Robot robot = {
