@@ -32,7 +32,7 @@ static void drawWalls(Robot* r)
     double robotAngle = r->orientation * PI / 2.0 - PI/2.0;
     double rayAngle = robotAngle - FOV * PI/180 / 2.0;
 
-    double robotX = r->x + 0.5; // the + 0.5 starts ray at the center of the robot's square
+    double robotX = r->x + 0.5; //the + 0.5 starts ray at the center of the robot's square
     double robotY = r->y + 0.5;
 
     int x = -1;
@@ -43,7 +43,7 @@ static void drawWalls(Robot* r)
         double rayDirX = cos(rayAngle);
         double rayDirY = sin(rayAngle);
 
-        double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1.0 / rayDirX); // avoid division by zero
+        double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1.0 / rayDirX); //avoid division by zero
         double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1.0 / rayDirY);
 
         int stepX = (rayDirX < 0) ? -1 : 1;
@@ -65,9 +65,9 @@ static void drawWalls(Robot* r)
         else
             sideDistY = (mapY + 1.0 - robotY) * deltaDistY;
 
-        bool side; // 0 for vertical, 1 for horizontal
+        bool side; // 0 for vertical, 1 for horizontal wall faces.
 
-        // DDA algorithm: https://lodev.org/cgtutor/raycasting.html
+        //DDA algorithm: https://lodev.org/cgtutor/raycasting.html
         while(!isWall(mapY, mapX))
         {
             if(sideDistX < sideDistY)

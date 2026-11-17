@@ -2,7 +2,7 @@
 #include "config.h"
 #include "maze.h"
 
-//wall following maze solver algorithm
+//right-hand wall following guides the robot through the generated maze
 void updateRobot(Robot* r)
 {
     right(r);
@@ -21,7 +21,6 @@ void updateRobot(Robot* r)
         }
         else
         {
-            // Try turning left
             left(r);
 
             if (canMoveForward(r))
@@ -30,7 +29,6 @@ void updateRobot(Robot* r)
             }
             else
             {
-                // Dead end: turn around
                 left(r);
             }
         }

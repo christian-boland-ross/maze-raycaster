@@ -6,7 +6,6 @@
 
 static void drawGrid(void)
 {
-    //Grid is always 200x200 pixels, displayed in top left corner of window
     setColour(white);
     fillRect(0, 0, GRID_PIXELS, GRID_PIXELS);
     setColour(black);
@@ -65,7 +64,7 @@ void drawRobot(Robot* r)
 
     switch (r->orientation)
     {
-        case 0: // North
+        case 0: //south
             px[0] = centreX;
             py[0] = top;
             px[1] = right;
@@ -74,7 +73,7 @@ void drawRobot(Robot* r)
             py[2] = bottom;
             break;
 
-        case 1: // East
+        case 1: //east
             px[0] = right;
             py[0] = centreY;
             px[1] = left;
@@ -83,7 +82,7 @@ void drawRobot(Robot* r)
             py[2] = bottom;
             break;
 
-        case 2: // South
+        case 2: //north
             px[0] = centreX;
             py[0] = bottom;
             px[1] = left;
@@ -92,7 +91,7 @@ void drawRobot(Robot* r)
             py[2] = top;
             break;
 
-        case 3: // West
+        case 3: //west
             px[0] = left;
             py[0] = centreY;
             px[1] = right;

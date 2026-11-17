@@ -20,7 +20,6 @@ int main(void)
         1
     };
     
-    //main game loop
     while(true)
     {
         clear();

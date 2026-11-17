@@ -31,7 +31,6 @@ void initialiseMaze(void)
         }
     }
 
-    //track which logical cells have been visited
     bool visited[GRID_SIZE][GRID_SIZE] = {false};
 
     Position stack[GRID_SIZE * GRID_SIZE];
@@ -49,12 +48,11 @@ void initialiseMaze(void)
     const int dx[] = {0, 0, -2, 2};
     const int dy[] = {-2, 2, 0, 0};
 
-    //randomised DFS
+    // Randomized depth-first search carves passages between cells two squares apart.
     while (stackSize > 0)
     {
         Position current = stack[stackSize - 1];
 
-        //find all unvisited neighbours
         Position neighbours[4];
         int neighbourCount = 0;
 
@@ -71,24 +69,20 @@ void initialiseMaze(void)
             }
         }
 
-        //no unvisited neighbours: backtrack
         if (neighbourCount == 0)
         {
             stackSize--;
             continue;
         }
 
-        //pick a random unvisited neighbour
         Position next = neighbours[rand() % neighbourCount];
 
-        //remove the wall between the current cell and its neighbour
         int wallX = (current.x + next.x) / 2;
         int wallY = (current.y + next.y) / 2;
 
         maze[wallY][wallX] = SPACE;
         maze[next.y][next.x] = SPACE;
 
-        //mark the neighbour as visited and continue
         visited[next.y][next.x] = true;
         stack[stackSize++] = next;
     }
