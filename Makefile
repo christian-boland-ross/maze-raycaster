@@ -12,16 +12,19 @@ SOURCES = $(wildcard $(SRC_DIR)/*.c) $(GRAPHICS_DIR)/graphics.c
 TARGET = maze
 
 TEXTURE_SET ?= default
+MAZE_SIZE ?= 10
 
-.PHONY: all clean run
+.PHONY: all clean run FORCE
 
 all: $(TARGET)
 
-$(TARGET): $(SOURCES)
-	$(CC) $(CFLAGS) -I$(GRAPHICS_DIR) -I$(INCLUDE_DIR) $(SOURCES) -o $(TARGET) $(LDLIBS)
+$(TARGET): $(SOURCES) FORCE
+	$(CC) $(CFLAGS) -DGRID_SIZE=$(MAZE_SIZE) -I$(GRAPHICS_DIR) -I$(INCLUDE_DIR) $(SOURCES) -o $(TARGET) $(LDLIBS)
 
 run: $(TARGET)
 	TEXTURE_SET=$(TEXTURE_SET) ./$(TARGET) | java -jar $(GRAPHICS_DIR)/drawapp-5.0.jar
 
 clean:
 	rm -f $(TARGET)
+
+FORCE:

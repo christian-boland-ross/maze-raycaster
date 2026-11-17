@@ -8,7 +8,9 @@
 #define WINDOW_WIDTH 400
 #define WINDOW_HEIGHT 200
 
+#ifndef GRID_SIZE
 #define GRID_SIZE 10
+#endif
 #define GRID_PIXELS 100
 #define CELL_SIZE GRID_PIXELS/GRID_SIZE
 
