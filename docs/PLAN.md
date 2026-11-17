@@ -52,3 +52,4 @@ TO_DO:
 ## Maze Generator
 TO-DO:
 - [x] Choose algorithm
+- [x] Implement algorithm
