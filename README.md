@@ -6,6 +6,22 @@ Course work specification can be found at [CCoursework.pdf](docs/CCoursework.pdf
 
 This project implements a simple maze-solving program in C for the COMP0002 coursework. It displays a maze, renders a robot moving through it, and demonstrates both a maze generator and a search strategy that guides the robot to the exit.
 
+<p align="center">
+  <img src="docs/images/default.png"
+       alt="MAZE_SIZE=5 TEXTURE_SET=default"
+       style="width: 100%; height: auto;" />
+       
+  <img src="docs/images/backrooms.png"
+       alt="MAZE_SIZE=10 TEXTURE_SET=backrooms"
+       style="width: 33%; height: auto;" />
+  <img src="docs/images/minecraft.png"
+       alt="MAZE_SIZE=15 TEXTURE_SET=minecraft"
+       style="width: 33%; height: auto;" />
+  <img src="docs/images/wolfenstein.png"
+       alt="MAZE_SIZE=20 TEXTURE_SET=wolfenstein"
+       style="width: 33%; height: auto;" />
+</p>
+
 ## What the program does
 
 - Draws a maze in a window using the provided graphics library.
