@@ -19,12 +19,16 @@ int main(void)
         ENTRANCE_MARKER_Y,
         EAST
     };
+
+    background();
+    draw3DBackground();
     
+    foreground();
     while(true)
     {
         clear();
 
-        draw3DWorld(&robot);
+        draw3DWalls(&robot);
 
         draw2DWorld();
         drawRobot(&robot);

@@ -4,7 +4,8 @@
 #include "robot.h"
 #include "config.h"
 
-void draw3DWorld(Robot* r);
+void draw3DBackground();
+void draw3DWalls(Robot* r);
 
 typedef struct
 {

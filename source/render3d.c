@@ -10,23 +10,23 @@
 
 static TextureSet textures;
 
-static void drawWalls(Robot* r);
+void draw3DBacgkround();
+void draw3DWalls(Robot* r);
 static void drawSky(void);
 static void drawGround(void);
 static void drawColumn(double distance, int x, bool side, int texX);
 static bool loadTexture(Texture* texture, const char* filename);
 static void loadTextureSet(void);
 
-void draw3DWorld(Robot* r)
+void draw3DBackground()
 {
     loadTextureSet();
 
     drawSky();
     drawGround();
-    drawWalls(r);
 }
 
-static void drawWalls(Robot* r)
+void draw3DWalls(Robot* r)
 {
     double angleIncrement = FOV * PI/180 / WINDOW_WIDTH;
     double robotAngle = r->orientation * PI / 2.0 - PI/2.0;
