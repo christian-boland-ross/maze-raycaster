@@ -10,12 +10,8 @@
 
 static TextureSet textures;
 
-void draw3DBacgkround();
-void draw3DWalls(Robot* r);
 static void drawSky(void);
 static void drawGround(void);
-static void drawColumn(double distance, int x, bool horizontalSide, int texX);
-static bool loadTexture(Texture* texture, const char* filename);
 static void loadTextureSet(void);
 
 void draw3DBackground()
@@ -24,6 +20,39 @@ void draw3DBackground()
 
     drawSky();
     drawGround();
+}
+
+static void drawColumn(double distance, int x, bool horizontalSide, int texX)
+{
+    if(distance < 0.01)
+        distance = 0.01;
+
+    int wallHeight = (int)(WINDOW_HEIGHT / distance) * 0.4;
+
+    int wallTop = (WINDOW_HEIGHT - wallHeight) / 2;
+    int wallBottom = (WINDOW_HEIGHT + wallHeight) / 2;
+
+    double brightness = 255.0 / (1.0 + distance * 0.5);
+
+    //darken horizontal wall faces slightly for increased depth perception
+    if(horizontalSide)
+        brightness *= 0.7;
+
+    for(int y = wallTop; y < wallBottom; y++)
+    {
+        if(y < 0 || y >= WINDOW_HEIGHT)
+            continue;
+
+        int texY = (y - wallTop) * TEXTURE_SIZE / wallHeight;
+        Pixel pixel = textures.wall.pixels[texY][texX];
+        
+        int r = (int)(pixel.r * brightness / 255.0);
+        int g = (int)(pixel.g * brightness / 255.0);
+        int b = (int)(pixel.b * brightness / 255.0);
+
+        setRGBColour(r, g, b);
+        drawLine(x, y, x, y);
+    }
 }
 
 void draw3DWalls(Robot* r)
@@ -112,38 +141,6 @@ void draw3DWalls(Robot* r)
     }
 }
 
-static void drawColumn(double distance, int x, bool horizontalSide, int texX)
-{
-    if(distance < 0.01)
-        distance = 0.01;
-
-    int wallHeight = (int)(WINDOW_HEIGHT / distance) * 0.4;
-
-    int wallTop = (WINDOW_HEIGHT - wallHeight) / 2;
-    int wallBottom = (WINDOW_HEIGHT + wallHeight) / 2;
-
-    double brightness = 255.0 / (1.0 + distance * 0.5);
-
-    //darken horizontal wall faces slightly for increased depth perception
-    if(horizontalSide)
-        brightness *= 0.7;
-
-    for(int y = wallTop; y < wallBottom; y++)
-    {
-        if(y < 0 || y >= WINDOW_HEIGHT)
-            continue;
-
-        int texY = (y - wallTop) * TEXTURE_SIZE / wallHeight;
-        Pixel pixel = textures.wall.pixels[texY][texX];
-        
-        int r = (int)(pixel.r * brightness / 255.0);
-        int g = (int)(pixel.g * brightness / 255.0);
-        int b = (int)(pixel.b * brightness / 255.0);
-
-        setRGBColour(r, g, b);
-        drawLine(x, y, x, y);
-    }
-}
 
 static void drawSky(void)
 {
