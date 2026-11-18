@@ -16,31 +16,31 @@ This project implements a simple maze-solving program in C for the COMP0002 cour
 
 ## Build and run
 
-From the project root:
+Install GNU Make, GCC (such as MinGW-w64 on Windows), and Java, then run these commands from the project root. On Windows, use `make` if available or replace it with `mingw32-make`:
 
 ```bash
 make
 make run
 ```
 
-This compiles the program and launches it using the included drawing application.
+This compiles the program and launches it using the included drawing application. The Makefile supports macOS, Linux, Windows Command Prompt/PowerShell, and Git Bash.
 
-You can also select a texture theme before running:
-
-```bash
-TEXTURE_SET=default make run
-TEXTURE_SET=minecraft make run
-TEXTURE_SET=wolfenstein make run
-TEXTURE_SET=backrooms make run
-```
-
-You can also set the maze size when building and running (defaults to 10; valid sizes are 3–100):
+Choose a texture theme with a Make variable (the same syntax works in all shells):
 
 ```bash
-MAZE_SIZE=15 make run
+make run TEXTURE_SET=default
+make run TEXTURE_SET=minecraft
+make run TEXTURE_SET=wolfenstein
+make run TEXTURE_SET=backrooms
 ```
 
-Optional clean-up:
+Set the maze size when building and running (defaults to 10; valid sizes are 3–100):
+
+```bash
+make run MAZE_SIZE=15
+```
+
+Invalid maze sizes are rejected by the compiler. To remove the generated executable:
 
 ```bash
 make clean

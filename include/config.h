@@ -11,6 +11,11 @@
 #ifndef GRID_SIZE
 #define GRID_SIZE 10
 #endif
+
+#if GRID_SIZE < 3 || GRID_SIZE > 100
+#error GRID_SIZE must be between 3 and 100
+#endif
+
 #define GRID_PIXELS 100
 #define CELL_SIZE GRID_PIXELS/GRID_SIZE
 
