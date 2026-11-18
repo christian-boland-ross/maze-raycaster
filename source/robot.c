@@ -41,22 +41,22 @@ void forward(Robot* r)
     {
         switch (r->orientation)
         {
-            case 0: r->y++; break;
-            case 1: r->x++; break;
-            case 2: r->y--; break;
-            case 3: r->x--; break;
+            case SOUTH: r->y++; break;
+            case EAST: r->x++; break;
+            case NORTH: r->y--; break;
+            case WEST: r->x--; break;
         }
     }
 }
 
 void left(Robot* r)
 {
-    r->orientation = (r->orientation + 3) % 4;
+    r->orientation = (Orientation)((r->orientation + 3) % 4);
 }
 
 void right(Robot* r)
 {
-    r->orientation = (r->orientation + 1) % 4;
+    r->orientation = (Orientation)((r->orientation + 1) % 4);
 }
 
 bool atMarker(Robot* r)
@@ -71,10 +71,10 @@ bool canMoveForward(Robot* r)
 
     switch (r->orientation)
     {
-        case 0: nextY++; break;
-        case 1: nextX++; break;
-        case 2: nextY--; break;
-        case 3: nextX--; break;
+        case SOUTH: nextY++; break;
+        case EAST: nextX++; break;
+        case NORTH: nextY--; break;
+        case WEST: nextX--; break;
     }
 
     if (nextX < 0 || nextX >= GRID_SIZE || nextY < 0 || nextY >= GRID_SIZE)

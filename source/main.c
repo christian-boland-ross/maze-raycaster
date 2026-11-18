@@ -17,7 +17,7 @@ int main(void)
     Robot robot = {
         ENTRANCE_MARKER_X,
         ENTRANCE_MARKER_Y,
-        1
+        EAST
     };
     
     while(true)

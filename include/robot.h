@@ -1,11 +1,19 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+typedef enum
+{
+    SOUTH = 0,
+    EAST = 1,
+    NORTH = 2,
+    WEST = 3
+} Orientation;
+
 typedef struct robot
 {
     int x;
     int y;
-    int orientation; // 0=south, 1=east, 2=north, 3=west
+    Orientation orientation;
 } Robot;
 
 void updateRobot(Robot* r);

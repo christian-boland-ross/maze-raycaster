@@ -64,7 +64,7 @@ void drawRobot(Robot* r)
 
     switch (r->orientation)
     {
-        case 0: //south
+        case SOUTH:
             px[0] = centreX;
             py[0] = top;
             px[1] = right;
@@ -73,7 +73,7 @@ void drawRobot(Robot* r)
             py[2] = bottom;
             break;
 
-        case 1: //east
+        case EAST:
             px[0] = right;
             py[0] = centreY;
             px[1] = left;
@@ -82,7 +82,7 @@ void drawRobot(Robot* r)
             py[2] = bottom;
             break;
 
-        case 2: //north
+        case NORTH:
             px[0] = centreX;
             py[0] = bottom;
             px[1] = left;
@@ -91,7 +91,7 @@ void drawRobot(Robot* r)
             py[2] = top;
             break;
 
-        case 3: //west
+        case WEST:
             px[0] = left;
             py[0] = centreY;
             px[1] = right;
