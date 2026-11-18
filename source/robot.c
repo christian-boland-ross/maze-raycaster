@@ -2,39 +2,6 @@
 #include "config.h"
 #include "maze.h"
 
-//right-hand wall following guides the robot through the generated maze
-void updateRobot(Robot* r)
-{
-    right(r);
-
-    if (canMoveForward(r))
-    {
-        forward(r);
-    }
-    else
-    {
-        left(r);
-
-        if (canMoveForward(r))
-        {
-            forward(r);
-        }
-        else
-        {
-            left(r);
-
-            if (canMoveForward(r))
-            {
-                forward(r);
-            }
-            else
-            {
-                left(r);
-            }
-        }
-    }
-}
-
 void forward(Robot* r)
 {
     if(canMoveForward(r)) 

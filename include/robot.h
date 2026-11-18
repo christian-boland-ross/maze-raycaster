@@ -16,7 +16,6 @@ typedef struct
     Orientation orientation;
 } Robot;
 
-void updateRobot(Robot* r);
 void forward(Robot* r);
 void left(Robot* r);
 void right(Robot* r);

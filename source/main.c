@@ -4,6 +4,7 @@
 #include "config.h"
 #include "maze.h"
 #include "robot.h"
+#include "pathfind.h"
 
 #include <time.h>
 #include <stdlib.h>
