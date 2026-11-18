@@ -14,7 +14,7 @@ void draw3DBacgkround();
 void draw3DWalls(Robot* r);
 static void drawSky(void);
 static void drawGround(void);
-static void drawColumn(double distance, int x, bool side, int texX);
+static void drawColumn(double distance, int x, bool horizontalSide, int texX);
 static bool loadTexture(Texture* texture, const char* filename);
 static void loadTextureSet(void);
 
@@ -65,7 +65,7 @@ void draw3DWalls(Robot* r)
         else
             sideDistY = (mapY + 1.0 - robotY) * deltaDistY;
 
-        bool side; // 0 for vertical, 1 for horizontal wall faces.
+        bool horizontalSide;
 
         //DDA algorithm: https://lodev.org/cgtutor/raycasting.html
         while(!isWall(mapY, mapX))
@@ -74,24 +74,24 @@ void draw3DWalls(Robot* r)
             {
                 sideDistX += deltaDistX;
                 mapX += stepX;
-                side = 0;
+                horizontalSide = false;
             }
             else
             {
                 sideDistY += deltaDistY;
                 mapY += stepY;
-                side = 1;
+                horizontalSide = true;
             }
         }
 
         double distance;
-        if(side == 0)
+        if(!horizontalSide)
             distance = sideDistX - deltaDistX;
         else
             distance = sideDistY - deltaDistY;
 
         double wallX;
-        if(side == 0)
+        if(!horizontalSide)
             wallX = robotY + distance * rayDirY;
         else
             wallX = robotX + distance * rayDirX;
@@ -100,19 +100,19 @@ void draw3DWalls(Robot* r)
 
         //convert wall position into a texture coordinate.
         int texX = (int)(wallX * TEXTURE_SIZE);
-        if ((side == 0 && rayDirX > 0) || (side == 1 && rayDirY < 0))
+        if ((!horizontalSide && rayDirX > 0) || (horizontalSide && rayDirY < 0))
             texX = TEXTURE_SIZE - texX - 1;
 
         //correct distance for the fish-eye effect
         distance *= cos(rayAngle - robotAngle);
         
-        drawColumn(distance, x, side, texX);
+        drawColumn(distance, x, horizontalSide, texX);
 
         rayAngle += angleIncrement;
     }
 }
 
-static void drawColumn(double distance, int x, bool side, int texX)
+static void drawColumn(double distance, int x, bool horizontalSide, int texX)
 {
     if(distance < 0.01)
         distance = 0.01;
@@ -125,7 +125,7 @@ static void drawColumn(double distance, int x, bool side, int texX)
     double brightness = 255.0 / (1.0 + distance * 0.5);
 
     //darken horizontal wall faces slightly for increased depth perception
-    if(side == 1)
+    if(horizontalSide)
         brightness *= 0.7;
 
     for(int y = wallTop; y < wallBottom; y++)
