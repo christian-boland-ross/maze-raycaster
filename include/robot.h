@@ -9,7 +9,7 @@ typedef enum
     WEST = 3
 } Orientation;
 
-typedef struct robot
+typedef struct
 {
     int x;
     int y;
