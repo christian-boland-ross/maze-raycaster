@@ -1,10 +1,10 @@
-# maze_solver
+# maze_raycaster
 C coursework for UCL's *COMP0002: Principles of Programming* course.<br>
 Course work specification can be found at [CCoursework.pdf](docs/CCoursework.pdf), with notes thereof [here](docs/SPECIFICATION-NOTES.md).
 
-# Maze Solver
+# Maze Raycaster
 
-This project implements a simple maze-solving program in C for the COMP0002 coursework. It displays a maze, renders a robot moving through it, and demonstrates both a maze generator and a search strategy that guides the robot to the exit.
+This project implements a simple maze-solving and ray casting program in C for the COMP0002 coursework. It displays a maze, renders a robot moving through it, and demonstrates both a maze generator and a search strategy that guides the robot to the exit.
 
 <p align="center">
   <img src="docs/images/default.png"
